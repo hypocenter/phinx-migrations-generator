@@ -138,9 +138,7 @@ final class PhinxMySqlColumnGenerator
     private function getPhinxColumnType(array $columnData): string
     {
         $columnType = $columnData['COLUMN_TYPE'];
-        if ($columnType === 'tinyint(1)') {
-            return 'boolean';
-        }
+
         $map = [
             'tinyint' => 'integer',
             'smallint' => 'integer',

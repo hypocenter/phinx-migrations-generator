@@ -248,6 +248,8 @@ final class PhinxMySqlColumnOptionGenerator
         $intDefaultLimits = [
             'int' => '11',
             'bigint' => '20',
+            'tinyint' => '2',
+            'decimal' => null,
         ];
 
         // For integer and biginteger columns
@@ -269,6 +271,15 @@ final class PhinxMySqlColumnOptionGenerator
             // identity enable or disable automatic incrementing
             if ($columnData['EXTRA'] === 'auto_increment') {
                 $attributes['identity'] = 'enable';
+            }
+        }
+
+        if ($dataType === 'tinyint' || $dataType === 'decimal' || $dataType === 'smallint') {
+            // signed enable or disable the unsigned option (only applies to MySQL)
+            $match = null;
+            $pattern = '/unsigned$/';
+            if (preg_match($pattern, $columnData['COLUMN_TYPE'], $match) === 1) {
+                $attributes['signed'] = false;
             }
         }
 
