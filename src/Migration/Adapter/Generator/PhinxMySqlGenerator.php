@@ -334,7 +334,11 @@ final class PhinxMySqlGenerator
      */
     private function getTableVariable(array $table, string $tableName): string
     {
+        $tablePrefix = $this->options['manager']->getEnvironment($this->options['environment'])->getOptions()['table_prefix'] ?? null;
         $tableOptions = $this->tableOptionGenerator->getTableOptions($table);
+        if ($tablePrefix && 0 === stripos($tableName, $tablePrefix)) {
+            $tableName = substr($tableName, strlen($tablePrefix));
+        }
 
         return sprintf('%s$this->table(\'%s\', %s)', $this->ind2, $tableName, $tableOptions);
     }
